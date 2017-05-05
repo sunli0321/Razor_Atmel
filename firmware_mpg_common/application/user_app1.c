@@ -86,8 +86,14 @@ Promises:
   - 
 */
 void UserApp1Initialize(void)
-{
- 
+{    LedOff(RED);
+     LedOff(WHITE);
+     LedOff(GREEN);
+     LedOff(BLUE);
+     LedOff(CYAN);
+     LedOff(YELLOW);
+     LedOff(ORANGE);
+     LedOff(PURPLE);
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -134,18 +140,101 @@ State Machine Function Definitions
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Wait for ??? */
+static u8 GetButtonValue()                                                           //Get botton value
+{  
+  
+    u8 u8ButtonValue=5;
+    if(WasButtonPressed(BUTTON0))
+    { 
+      ButtonAcknowledge(BUTTON0);
+      u8ButtonValue=1;
+    }
+    
+    
+    if(WasButtonPressed(BUTTON1))
+    { 
+      ButtonAcknowledge(BUTTON1);
+      u8ButtonValue=2;
+    }
+   
+   
+    if(WasButtonPressed(BUTTON2))
+    {
+      ButtonAcknowledge(BUTTON2);
+      u8ButtonValue=3;
+    }
+    
+    
+
+    
+    return u8ButtonValue;
+    
+}
+
 static void UserApp1SM_Idle(void)
 {
+  static u8 au8InputPassword[]={5,5,5,5,5,5,5,5,5,5};
+  static u8 au8RealPassword[]={1,1,1,2,2,2,3,3,3,3};
+  static u8 u8Passwordcount=0;
+  static u8 u8IsRealPassword=1;
+  static u8 u8InputPassword;
+  static bool bCheckFlag=FALSE;
+  static bool bCheckResultFlag=TRUE;
+  u8 u8Index;
 
-} /* end UserApp1SM_Idle() */
-    
+  u8InputPassword=GetButtonValue();
+  if(u8InputPassword!=5)
+  {
+    au8InputPassword[u8Passwordcount]=u8InputPassword;
+    u8Passwordcount++;
+  }
+  
+  if(WasButtonPressed(BUTTON3))   
+  {
+    ButtonAcknowledge(BUTTON3);
+    bCheckFlag=TRUE;
+  }
+  
+  if(bCheckFlag==TRUE)
+  {
+    for(u8Index=0;u8Index<10;u8Index++)
+    {
+      if(au8RealPassword[u8Index]!=au8InputPassword[u8Index])
+      {
+        bCheckResultFlag=FALSE;
+        break;
+      }
+    }
+    if(bCheckResultFlag==FALSE)
+    {
+      LedOn(GREEN);
+      LedOff(RED);
+    }
+    else
+    {
+      LedOn(RED);
+      LedOff(GREEN);
+    }
+     u8Passwordcount=0;
+     bCheckResultFlag=TRUE;
+     bCheckFlag=FALSE;
+     for(u8Index=0;u8Index<10;u8Index++)
+     {
+        au8InputPassword[u8Index]=5;
+     }
+  
+  }
+ 
+}
+  /* end UserApp1SM_Idle() */
+   
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Handle an error */
 static void UserApp1SM_Error(void)          
 {
   
-} /* end UserApp1SM_Error() */
+} /* end UserApp1SM_Er
 
 
 

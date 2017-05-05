@@ -54,6 +54,7 @@ void UserApp1RunActiveState(void);
 /***********************************************************************************************************************
 State Machine Declarations
 ***********************************************************************************************************************/
+static u8 GetButtonValue(void);
 static void UserApp1SM_Idle(void);    
 
 static void UserApp1SM_Error(void);         
